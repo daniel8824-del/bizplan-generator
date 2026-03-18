@@ -31,7 +31,18 @@ Claude Code에서:
 /bizplan AI 기반 강의 콘텐츠 자동 생성 SaaS
 ```
 
-### 2. 웹앱
+### 2. Google Antigravity
+
+```bash
+git clone https://github.com/daniel8824-del/bizplan-generator.git
+cd bizplan-generator
+pip install -r requirements.txt
+```
+
+`.agent/skills/bizplan/` 폴더가 자동 인식됩니다.
+Antigravity에서 "사업계획서 만들어줘"라고 입력하면 스킬이 실행됩니다.
+
+### 3. 웹앱
 
 ```bash
 pip install -r requirements.txt
@@ -42,7 +53,7 @@ uvicorn app.main:app --port 8001
 
 브라우저에서 `http://localhost:8001` 접속
 
-### 3. Railway 배포
+### 4. Railway 배포
 
 [![Deploy on Railway](https://railway.com/button.svg)](https://railway.com/template)
 
