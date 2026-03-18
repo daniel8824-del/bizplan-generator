@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>예비창업패키지 사업계획서 자동 생성</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Pretendard', -apple-system, sans-serif; background: #f8f9fa; color: #28251D; }
+
+        .header { background: #01696F; color: white; padding: 24px 0; }
+        .header h1 { max-width: 800px; margin: 0 auto; padding: 0 20px; font-size: 24px; }
+        .header p { max-width: 800px; margin: 4px auto 0; padding: 0 20px; opacity: 0.8; font-size: 14px; }
+
+        .container { max-width: 800px; margin: 32px auto; padding: 0 20px; }
+
+        .card { background: white; border-radius: 12px; padding: 32px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); margin-bottom: 24px; }
+        .card h2 { color: #01696F; font-size: 18px; margin-bottom: 20px; padding-bottom: 12px; border-bottom: 2px solid #E8F5F5; }
+
+        label { display: block; font-weight: 600; margin-bottom: 6px; font-size: 14px; color: #333; }
+        input, textarea, select { width: 100%; padding: 10px 14px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px; margin-bottom: 16px; font-family: inherit; }
+        textarea { min-height: 80px; resize: vertical; }
+        input:focus, textarea:focus { outline: none; border-color: #01696F; box-shadow: 0 0 0 3px rgba(1,105,111,0.1); }
+
+        .required::after { content: " *"; color: #e74c3c; }
+
+        .btn { background: #01696F; color: white; border: none; padding: 14px 32px; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer; width: 100%; transition: all 0.2s; }
+        .btn:hover { background: #015258; }
+        .btn:disabled { background: #ccc; cursor: not-allowed; }
+
+        .progress-section { display: none; }
+        .progress-bar { background: #E8F5F5; border-radius: 8px; overflow: hidden; height: 8px; margin: 12px 0; }
+        .progress-fill { background: #01696F; height: 100%; transition: width 0.5s; width: 0%; }
+        .phase-text { font-size: 14px; color: #666; margin-top: 8px; }
+        .progress-pct { font-size: 24px; font-weight: 700; color: #01696F; }
+
+        .result-section { display: none; }
+        .download-btn { display: inline-block; background: #01696F; color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none; margin: 8px 8px 8px 0; font-weight: 600; }
+        .download-btn:hover { background: #015258; }
+
+        .upload-row { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+        .upload-row input[type="file"] { margin-bottom: 0; }
+        .upload-row .file-types { font-size: 12px; color: #999; white-space: nowrap; }
+
+        .file-upload-zone { border: 1px dashed #ccc; border-radius: 8px; padding: 12px; margin-bottom: 16px; background: #fafafa; }
+        .file-add-btn { background: #E8F5F5; color: #01696F; border: 1px solid #01696F; border-radius: 6px; padding: 6px 16px; font-size: 13px; font-weight: 600; cursor: pointer; }
+        .file-add-btn:hover { background: #01696F; color: white; }
+        .file-list { margin-top: 8px; }
+        .file-item { display: flex; justify-content: space-between; align-items: center; padding: 6px 8px; font-size: 13px; color: #555; background: white; border-radius: 4px; margin-top: 4px; }
+        .file-item .file-name { flex: 1; }
+        .file-item .file-size { color: #999; margin: 0 12px; }
+        .file-item .file-remove { color: #e74c3c; cursor: pointer; font-weight: 600; border: none; background: none; font-size: 14px; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>예비창업패키지 사업계획서 자동 생성</h1>
+        <p>AI 기반 시장 조사 + Perplexity 수준 사업계획서 + PDF 자동 생성</p>
+    </div>
+
+    <div class="container">
+        <form id="bizplanForm" class="card" enctype="multipart/form-data">
+            <h2>창업 아이템 정보</h2>
+
+            <label class="required">창업 아이템 (한 줄 설명)</label>
+            <input type="text" name="item" placeholder="예: AI 기반 강의 콘텐츠 자동 생성 SaaS" required>
+
+            <label>해결하려는 문제</label>
+            <textarea name="problem" placeholder="어떤 문제를 해결하나요?"></textarea>
+
+            <label>목표 고객</label>
+            <input type="text" name="target" placeholder="예: 사이버대학교, 기업 HRD">
+
+            <label>창업자 이력 (학력, 경력, 전문성)</label>
+            <textarea name="founder" placeholder="예: 교육공학 석사, AI 교육콘텐츠 개발 5년"></textarea>
+
+            <label>팀 구성</label>
+            <input type="text" name="team" placeholder="예: 1인 창업 + 공동창업자 1명 (개발자)">
+
+            <label>기업(예정)명</label>
+            <input type="text" name="company" placeholder="예: 클래스오토AI">
+
+            <label>파일 업로드 <span style="font-weight: 400; color: #999;">(선택)</span></label>
+            <div class="file-upload-zone">
+                <button type="button" class="file-add-btn" onclick="document.getElementById('uploadInput').click()">+ 파일 추가</button>
+                <input type="file" id="uploadInput" accept=".docx,.pptx,.xlsx,.txt,.md,.pdf" multiple style="display:none;">
+                <div id="uploadFilesList" class="file-list"></div>
+            </div>
+
+            <label>활용 의도 (자유 입력)</label>
+            <textarea name="upload_intent" rows="3" placeholder="이 파일의 톤앤매너를 따라서 작성해 주세요.&#10;이 자료를 참고해서 시장 분석에 반영해 주세요.&#10;이 원본 내용을 유지하면서 부족한 부분만 보강해 주세요." style="min-height: auto;"></textarea>
+
+            <button type="submit" class="btn" id="submitBtn">사업계획서 생성 시작</button>
+        </form>
+
+        <!-- 진행 상태 -->
+        <div id="progressSection" class="card progress-section">
+            <h2>생성 진행 중...</h2>
+            <div class="progress-pct" id="progressPct">0%</div>
+            <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+            <div class="phase-text" id="phaseText">준비 중...</div>
+        </div>
+
+        <!-- 결과 -->
+        <div id="resultSection" class="card result-section">
+            <h2>사업계획서 완성!</h2>
+            <p style="margin-bottom: 16px;">아래 버튼으로 다운로드하세요.</p>
+
+            <div style="margin-bottom: 20px;">
+                <a class="download-btn" id="downloadPdf" href="#">PDF 다운로드</a>
+                <a class="download-btn" id="downloadDocx" href="#" style="background:#2C3E50;">워드 (.docx)</a>
+                <a class="download-btn" id="downloadMd" href="#" style="background:#7F8C8D;">마크다운 (.md)</a>
+            </div>
+
+            <h2>단계별 산출물</h2>
+            <div id="fileList" style="display:flex;flex-wrap:wrap;gap:8px;"></div>
+        </div>
+    </div>
+
+    <script>
+        const uploadManager = (function() {
+            const input = document.getElementById('uploadInput');
+            const list = document.getElementById('uploadFilesList');
+            const files = [];
+            input.addEventListener('change', () => {
+                Array.from(input.files).forEach(f => {
+                    if (!files.some(x => x.name === f.name && x.size === f.size)) files.push(f);
+                });
+                input.value = '';
+                render();
+            });
+            function render() {
+                list.innerHTML = '';
+                files.forEach((f, i) => {
+                    const div = document.createElement('div');
+                    div.className = 'file-item';
+                    const size = f.size > 1024*1024 ? (f.size/1024/1024).toFixed(1)+'MB' : (f.size/1024).toFixed(0)+'KB';
+                    div.innerHTML = '<span class="file-name">' + f.name + '</span><span class="file-size">' + size + '</span><button type="button" class="file-remove" data-idx="' + i + '">X</button>';
+                    list.appendChild(div);
+                });
+                list.querySelectorAll('.file-remove').forEach(btn => {
+                    btn.addEventListener('click', (e) => { files.splice(parseInt(e.target.dataset.idx), 1); render(); });
+                });
+            }
+            return { getFiles: () => files };
+        })();
+
+        const form = document.getElementById('bizplanForm');
+        const progressSection = document.getElementById('progressSection');
+        const resultSection = document.getElementById('resultSection');
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData(form);
+            uploadManager.getFiles().forEach(f => formData.append('upload_file', f));
+            document.getElementById('submitBtn').disabled = true;
+            progressSection.style.display = 'block';
+
+            const resp = await fetch('/api/start', { method: 'POST', body: formData });
+            const { job_id } = await resp.json();
+
+            const poll = setInterval(async () => {
+                const status = await fetch(`/api/status/${job_id}`).then(r => r.json());
+                document.getElementById('progressPct').textContent = status.progress + '%';
+                document.getElementById('progressFill').style.width = status.progress + '%';
+                document.getElementById('phaseText').textContent = status.phase;
+
+                if (status.status === 'completed') {
+                    clearInterval(poll);
+                    progressSection.style.display = 'none';
+                    resultSection.style.display = 'block';
+                    document.getElementById('downloadMd').href = `/api/download/${job_id}/md`;
+                    document.getElementById('downloadPdf').href = `/api/download/${job_id}/pdf`;
+                    document.getElementById('downloadDocx').href = `/api/download/${job_id}/docx`;
+
+                        // Fetch all files
+                        fetch(`/api/files/${job_id}`).then(r => r.json()).then(data => {
+                            const fileList = document.getElementById('fileList');
+                            fileList.innerHTML = '';
+                            const labels = {
+                                '00_item_brief.md': '아이템 브리프',
+                                '01_market_size.md': '시장 규모 분석',
+                                '02_target_customers.md': '타겟 고객 분석',
+                                '03_competitors.md': '경쟁사 분석',
+                                '04_go_to_market.md': '시장 진입 전략',
+                                '05_founder_fit.md': '창업자 적합성',
+                                '06_사업계획서_최종.md': '사업계획서 (마크다운)',
+                            };
+                            const chartWords = {
+                                'market': '시장', 'size': '규모', 'trend': '추이', 'growth': '성장',
+                                'competitor': '경쟁사', 'comparison': '비교', 'positioning': '포지셔닝',
+                                'map': '맵', 'price': '가격', 'pricing': '가격', 'segment': '세그먼트',
+                                'revenue': '수익', 'tam': 'TAM', 'sam': 'SAM', 'som': 'SOM',
+                                'customer': '고객', 'target': '타겟', 'funnel': '퍼널',
+                                'roadmap': '로드맵', 'timeline': '타임라인', 'forecast': '전망',
+                                'share': '점유율', 'distribution': '분포', 'analysis': '분석',
+                                'heatmap': '히트맵', 'coverage': '커버리지', 'feature': '기능',
+                            };
+                            function chartToKorean(filename) {
+                                const name = filename.replace('charts/', '').replace('.png', '').replace('.jpg', '');
+                                const words = name.split(/[_\-\s]+/);
+                                const translated = words.map(w => chartWords[w.toLowerCase()] || w);
+                                return translated.join(' ') + ' 차트';
+                            }
+                            const hide = ['사업계획서.pdf', '사업계획서.docx'];
+                            (data.files || []).forEach(f => {
+                                if (hide.includes(f.name)) return;
+                                let label = labels[f.name];
+                                if (!label && f.name.startsWith('charts/')) label = chartToKorean(f.name);
+                                if (!label) return;
+                                const a = document.createElement('a');
+                                a.href = `/api/download/${job_id}/file/${f.name}`;
+                                a.textContent = label;
+                                a.style.cssText = 'display:inline-block;padding:8px 16px;background:#E8F5F5;color:#01696F;border-radius:6px;text-decoration:none;font-size:13px;font-weight:600;border:1px solid #01696F;';
+                                fileList.appendChild(a);
+                            });
+                        });
+                }
+                if (status.status === 'error') {
+                    clearInterval(poll);
+                    document.getElementById('phaseText').textContent = '에러: ' + status.phase;
+                    document.getElementById('submitBtn').disabled = false;
+                }
+            }, 3000);
+        });
+    </script>
+</body>
+</html>
