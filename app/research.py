@@ -8,7 +8,7 @@ import asyncio
 import os
 from typing import Optional
 
-FIRECRAWL_API_KEY = os.environ.get("FIRECRAWL_API_KEY", "fc-d5c2972fa0ea453180e7b986bb6e5bdb")
+FIRECRAWL_API_KEY = os.environ.get("FIRECRAWL_API_KEY", "")
 FIRECRAWL_BASE = "https://api.firecrawl.dev/v1"
 
 
