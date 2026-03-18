@@ -2,6 +2,12 @@
 
 AI 기반 예비창업패키지 사업계획서 자동 생성기입니다. Claude Code 스킬 + 웹앱으로 사용 가능합니다.
 
+[![Python 3.10+](https://img.shields.io/badge/Python-3.10%2B-blue)](https://www.python.org/)
+[![FastAPI](https://img.shields.io/badge/FastAPI-0.115-009688)](https://fastapi.tiangolo.com/)
+[![Claude Sonnet 4.6](https://img.shields.io/badge/Claude-Sonnet%204.6-blueviolet)](https://anthropic.com/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Deploy on Railway](https://img.shields.io/badge/Railway-Deploy-black)](https://bizplan-generator.up.railway.app)
+
 ## Features
 
 - 창업 아이템 정보만 입력하면 **예비창업패키지 사업계획서** 자동 생성
