@@ -47,6 +47,7 @@ Railway URL: https://bizplan-generator.up.railway.app
 `.env` 파일에 설정:
 ```
 OPENROUTER_API_KEY=필수 (Claude Sonnet 4.6)
+FIRECRAWL_API_KEY=필수 (시장 조사 — Statista, PitchBook 등 검색)
 ```
 
 ## Pipeline
